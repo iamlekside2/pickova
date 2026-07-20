@@ -1,0 +1,247 @@
+// Pickova data model.
+//
+// Local dev uses SQLite for zero-setup. Production target is Postgres/Neon:
+// to switch, set `provider = "postgresql"` below and DATABASE_URL to the Neon
+// string, then run `prisma migrate dev`. The schema intentionally avoids
+// SQLite-unsupported features (native enums, scalar lists) so the swap is
+// mechanical — lists are stored as Json, statuses as String + TS constants
+// (see lib/constants.ts).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Catalog
+// ---------------------------------------------------------------------------
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  icon      String // lucide icon name, resolved on the client
+  blurb     String    @default("")
+  sortOrder Int       @default(0)
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+/// Seasons live on as marketing "collections" — decoupled from core catalog so
+/// the neutral storefront works without any active collection.
+model Collection {
+  id           String    @id @default(cuid())
+  name         String
+  slug         String    @unique
+  active       Boolean   @default(false)
+  months       String    @default("[]") // Json array of 1-based months
+  emoji        String    @default("")
+  icon         String    @default("")
+  heroHeadline String    @default("")
+  heroSubtext  String    @default("")
+  heroImage    String    @default("")
+  themeFrom    String    @default("#0A6640")
+  themeTo      String    @default("#0d7a4d")
+  products     Product[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+}
+
+model Product {
+  id           String      @id @default(cuid())
+  name         String
+  slug         String      @unique
+  description  String      @default("")
+  price        Int // sell price, in whole naira
+  costPrice    Int         @default(0) // supplier cost, in whole naira
+  images       String      @default("[]") // Json array of image URLs
+  stock        Int         @default(0)
+  status       String      @default("active") // active | draft | out_of_stock
+  rating       Float       @default(4.5)
+  source       String      @default("local") // jumia | konga | local
+  affiliateUrl String      @default("")
+
+  category   Category @relation(fields: [categoryId], references: [id])
+  categoryId String
+
+  collection   Collection? @relation(fields: [collectionId], references: [id])
+  collectionId String?
+
+  supplier   Supplier? @relation(fields: [supplierId], references: [id])
+  supplierId String?
+  supplierSku String?
+
+  orderItems OrderItem[]
+  views      ProductView[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([categoryId])
+  @@index([collectionId])
+  @@index([supplierId])
+}
+
+// ---------------------------------------------------------------------------
+// Suppliers & dropshipping
+// ---------------------------------------------------------------------------
+
+model Supplier {
+  id            String   @id @default(cuid())
+  name          String
+  contactEmail  String   @default("")
+  contactPhone  String   @default("")
+  adapterKey    String   @default("manual") // manual | generic-rest | ...
+  apiBaseUrl    String   @default("")
+  apiCredentials String  @default("{}") // Json; encrypt at rest in production
+  leadTimeDays  Int      @default(3)
+  status        String   @default("active") // active | paused
+
+  products       Product[]
+  supplierOrders SupplierOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+/// One record per (order, supplier) — the unit that gets auto-forwarded.
+model SupplierOrder {
+  id             String   @id @default(cuid())
+  order          Order    @relation(fields: [orderId], references: [id])
+  orderId        String
+  supplier       Supplier @relation(fields: [supplierId], references: [id])
+  supplierId     String
+  externalRef    String   @default("") // supplier's order id
+  status         String   @default("pending") // pending | awaiting_manual | placed | shipped | delivered | failed
+  trackingNumber String   @default("")
+  payload        String   @default("{}") // Json snapshot of what we sent
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([orderId])
+  @@index([supplierId])
+}
+
+// ---------------------------------------------------------------------------
+// Orders & customers
+// ---------------------------------------------------------------------------
+
+model Customer {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  phone        String   @default("")
+  address      String   @default("")
+  passwordHash String? // null for guest customers created from orders
+  orders       Order[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Order {
+  id          String  @id @default(cuid())
+  orderNumber String  @unique
+
+  customer   Customer? @relation(fields: [customerId], references: [id])
+  customerId String?
+  // Snapshot of buyer details at checkout (customer may be guest)
+  customerName    String @default("")
+  customerEmail   String @default("")
+  customerPhone   String @default("")
+  deliveryAddress String @default("")
+
+  status      String @default("pending_payment") // pending_payment | paid | forwarded | shipped | delivered | cancelled | refunded
+  subtotal    Int    @default(0)
+  shippingFee Int    @default(0)
+  discount    Int    @default(0)
+  couponCode  String @default("")
+  total       Int    @default(0)
+
+  paystackRef  String @default("")
+  paidAt       DateTime?
+
+  items          OrderItem[]
+  supplierOrders SupplierOrder[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([customerId])
+}
+
+model OrderItem {
+  id        String @id @default(cuid())
+  order     Order  @relation(fields: [orderId], references: [id])
+  orderId   String
+
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+  // Snapshots so the line survives product edits/deletes
+  name      String
+  price     Int
+  qty       Int    @default(1)
+
+  supplierId       String?
+  fulfilmentStatus String @default("pending") // pending | forwarded | shipped | delivered | cancelled
+
+  @@index([orderId])
+  @@index([productId])
+}
+
+// ---------------------------------------------------------------------------
+// Marketing & analytics
+// ---------------------------------------------------------------------------
+
+model Coupon {
+  id         String   @id @default(cuid())
+  code       String   @unique
+  type       String   @default("percent") // percent | fixed
+  value      Int      @default(0)
+  active     Boolean  @default(true)
+  expiresAt  DateTime?
+  usageLimit Int      @default(0) // 0 = unlimited
+  usedCount  Int      @default(0)
+  createdAt  DateTime @default(now())
+}
+
+model NewsletterSubscriber {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+}
+
+/// Feeds best-sellers / trending once real traffic exists.
+model ProductView {
+  id        String   @id @default(cuid())
+  product   Product? @relation(fields: [productId], references: [id])
+  productId String?
+  createdAt DateTime @default(now())
+
+  @@index([productId])
+}
+
+// ---------------------------------------------------------------------------
+// Admin
+// ---------------------------------------------------------------------------
+
+/// Simple key/value store for global settings (e.g. default markup %).
+model Setting {
+  key   String @id
+  value String
+}
+
+model AdminUser {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String   @default("")
+  passwordHash String
+  role         String   @default("staff") // owner | staff
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}

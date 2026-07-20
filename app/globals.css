@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-sora: "Sora", sans-serif;
+  --font-inter: "Inter", sans-serif;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  background: #fbf7ee;
+  color: #0a3d26;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: #ffb300;
+  color: #0a3d26;
+}
+
+/* Hidden scrollbar utility for horizontal scroll strips */
+.pk-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.pk-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Respect reduced-motion preferences for hero autoplay / transitions */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

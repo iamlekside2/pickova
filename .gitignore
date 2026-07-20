@@ -1,0 +1,17 @@
+/node_modules
+/.next
+/out
+/build
+.DS_Store
+*.pem
+npm-debug.log*
+.env
+.env*.local
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+
+# Prisma local SQLite dev database
+*.db
+*.db-journal
+/prisma/dev.db*
