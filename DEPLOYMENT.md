@@ -50,9 +50,15 @@ pointed at Neon, or from a one-off shell):
 
 ```bash
 # point DATABASE_URL at your Neon string first (e.g. in .env)
-npx prisma db push        # creates all tables on Neon
+npx prisma db push        # creates all tables on the database
 npm run db:seed           # loads categories, collections, sample catalogue + admin user
+npx prisma db execute --file prisma/rls.sql --schema prisma/schema.prisma  # lock the public Data API (Supabase)
 ```
+
+> **Supabase security:** run `prisma/rls.sql` after `db push` (and after any future
+> schema change that adds a table). It enables Row-Level Security on all tables so
+> Supabase's public Data API can't touch them. The app is unaffected — Prisma
+> connects as the table owner, which bypasses RLS.
 
 > The seed also creates the **admin user** from `ADMIN_EMAIL` / `ADMIN_PASSWORD`.
 > Set those to your real values **before** seeding.
