@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { X, Lock } from "lucide-react";
-import { FaWhatsapp } from "react-icons/fa";
 import { useCart } from "@/components/CartProvider";
 import { naira } from "@/lib/format";
 import { NEUTRAL_THEME } from "@/lib/theme";
@@ -12,17 +11,6 @@ export function CartDrawer() {
   const { items, isOpen, closeCart, changeQty, removeItem, subtotal, count } = useCart();
 
   if (!isOpen) return null;
-
-  const whatsappCheckout = () => {
-    const number = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "2348000000000";
-    const lines = items
-      .map((i) => `• ${i.name} × ${i.qty} — ${naira(i.price * i.qty)}`)
-      .join("\n");
-    const message = `Hi Pickova, I want to order:\n${lines}\n\nSubtotal: ${naira(
-      subtotal,
-    )}`;
-    return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
-  };
 
   return (
     <>
@@ -138,15 +126,6 @@ export function CartDrawer() {
               <Lock size={16} />
               Checkout · Pay with Paystack
             </Link>
-            <a
-              href={whatsappCheckout()}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-2 flex items-center justify-center gap-2 rounded-lg border border-brand-line-2 px-4 py-2.5 text-sm font-semibold text-brand-green transition-colors hover:bg-brand-bg"
-            >
-              <FaWhatsapp size={16} />
-              Or order on WhatsApp
-            </a>
           </div>
         )}
       </aside>

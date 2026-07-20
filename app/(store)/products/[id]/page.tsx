@@ -6,7 +6,6 @@ import { NEUTRAL_THEME } from "@/lib/theme";
 import { getCatalog, getStoreProductById } from "@/lib/store";
 import { naira, normalizeRating } from "@/lib/format";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 import { ProductCard } from "@/components/ProductCard";
 import { RecentlyViewed } from "@/components/RecentlyViewed";
 import { AddToBasketButton } from "./AddToBasketButton";
@@ -109,7 +108,6 @@ export default async function ProductPage({ params }: { params: Params }) {
           {/* Actions */}
           <div className="flex flex-col gap-3 sm:flex-row">
             <AddToBasketButton product={product} />
-            <WhatsAppButton product={product} className="flex-1 sm:flex-none" />
           </div>
 
           {/* Trust points */}

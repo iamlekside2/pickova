@@ -56,7 +56,7 @@ export function NeutralHero({ lowestPrice }: { lowestPrice: number }) {
           </div>
           <div className="mt-6 flex items-center gap-2 text-[13px] font-semibold text-white/80">
             <ShieldCheck size={16} className="text-brand-gold" />
-            Order on WhatsApp · Pay secure with Paystack
+            Secure checkout · Pay with Paystack
           </div>
         </div>
       </div>

@@ -7,7 +7,6 @@ import type { Product, Season } from "@/lib/types";
 import { naira, normalizeRating } from "@/lib/format";
 import { useCart } from "@/components/CartProvider";
 import { ImagePlaceholder } from "@/components/ImagePlaceholder";
-import { WhatsAppButton } from "@/components/WhatsAppButton";
 
 type ProductCardProps = {
   product: Product;
@@ -124,9 +123,6 @@ export function ProductCard({ product, season }: ProductCardProps) {
           Pick It
           <ArrowRight size={16} />
         </button>
-
-        {/* Order via WhatsApp (green) */}
-        <WhatsAppButton product={product} className="w-full" />
       </div>
     </div>
   );
