@@ -116,14 +116,24 @@ export async function createCheckout(
   const callbackUrl = `${siteUrl}/checkout/callback`;
 
   if (isPaystackConfigured()) {
-    const { authorizationUrl } = await initializeTransaction({
-      email,
-      amountKobo: toKobo(total),
-      reference: order.paystackRef,
-      callbackUrl,
-      metadata: { orderNumber, orderId: order.id },
-    });
-    redirect(authorizationUrl);
+    let authorizationUrl: string;
+    try {
+      ({ authorizationUrl } = await initializeTransaction({
+        email,
+        amountKobo: toKobo(total),
+        reference: order.paystackRef,
+        callbackUrl,
+        metadata: { orderNumber, orderId: order.id },
+      }));
+    } catch (err) {
+      // A Paystack failure must not crash checkout — show a friendly message.
+      console.error("[checkout] Paystack initialize failed:", err);
+      return {
+        error:
+          "We couldn't start the payment right now. Please try again in a moment, or contact us if it continues.",
+      };
+    }
+    redirect(authorizationUrl); // redirect() throws NEXT_REDIRECT — keep outside try
   }
 
   // Mock mode — no live keys. Proceed straight to the callback in mock mode.
