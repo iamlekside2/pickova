@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/db";
 import { verifyWebhookSignature } from "@/lib/paystack";
 import { fulfillOrder } from "@/lib/fulfilment/engine";
+import { sendOrderEmails } from "@/lib/email";
 
 // Paystack webhook — the authoritative source of payment truth. Verifies the
 // HMAC signature, then marks the matching order paid (idempotently).
@@ -27,8 +28,9 @@ export async function POST(req: Request) {
         where: { id: order.id },
         data: { status: "paid", paidAt: new Date() },
       });
-      // Forward to suppliers (idempotent — callback may also trigger this).
+      // Forward to suppliers + send confirmation/alert emails (runs once).
       await fulfillOrder(order.id);
+      await sendOrderEmails(order.id);
     }
   }
 

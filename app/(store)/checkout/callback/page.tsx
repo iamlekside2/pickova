@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { naira } from "@/lib/format";
 import { isPaystackConfigured, verifyTransaction } from "@/lib/paystack";
 import { fulfillOrder } from "@/lib/fulfilment/engine";
+import { sendOrderEmails } from "@/lib/email";
 import { CartClear } from "@/components/CartClear";
 
 export const metadata: Metadata = { title: "Order status" };
@@ -48,8 +49,10 @@ export default async function CheckoutCallbackPage({
         data: { status: "paid", paidAt: new Date() },
       });
       paid = true;
-      // Forward to suppliers (idempotent — webhook may also trigger this).
+      // Forward to suppliers + send confirmation/alert emails (runs once — this
+      // block only executes on the pending→paid transition).
       await fulfillOrder(order.id);
+      await sendOrderEmails(order.id);
     }
   }
 
