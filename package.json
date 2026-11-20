@@ -1,29 +1,38 @@
 {
   "name": "pickova",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "private": true,
-  "description": "Pickova — Nigerian sneaker e-commerce platform. Pick your pair.",
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
+  "description": "Pickova — Nigerian sneaker storefront. Orders are placed on WhatsApp. Pick your pair.",
   "scripts": {
-    "dev": "concurrently -n api,web -c blue,yellow \"npm run dev -w @pickova/api\" \"npm run dev -w @pickova/web\"",
-    "dev:api": "npm run dev -w @pickova/api",
-    "dev:web": "npm run dev -w @pickova/web",
-    "build": "npm run build -w @pickova/api && npm run build -w @pickova/web",
-    "typecheck": "npm run typecheck --workspaces --if-present",
-    "lint": "npm run lint --workspaces --if-present",
-    "test": "npm run test --workspaces --if-present",
-    "db:start": "node scripts/local-db.mjs start",
-    "db:stop": "node scripts/local-db.mjs stop",
-    "db:migrate": "npm run db:migrate -w @pickova/api",
-    "db:seed": "npm run db:seed -w @pickova/api",
-    "db:studio": "npm run db:studio -w @pickova/api"
+    "dev": "next dev -p 3009",
+    "build": "next build",
+    "start": "next start -p 3009",
+    "typecheck": "tsc --noEmit",
+    "lint": "next lint",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@hookform/resolvers": "^3.9.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.460.0",
+    "next": "^14.2.25",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-hook-form": "^7.53.2",
+    "zod": "^3.23.8",
+    "zustand": "^5.0.1"
   },
   "devDependencies": {
-    "concurrently": "^9.1.0",
-    "typescript": "^5.6.3"
+    "@types/node": "^20.14.14",
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^14.2.25",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
+    "typescript": "^5.6.3",
+    "vitest": "^2.1.5"
   },
   "engines": {
     "node": ">=20"

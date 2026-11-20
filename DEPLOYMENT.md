@@ -1,31 +1,23 @@
-# Pickova — Deployment notes
+# Pickova — Deployment
 
-> Full production guide is written in **Phase 6**. This page records what is already true so nothing is deployed by accident.
+The site is a single Next.js app with no database, backend or secrets, so it runs on a free host.
 
-## What runs where
+## Vercel (recommended, free tier)
 
-| Piece | What it is | Needs |
-| --- | --- | --- |
-| `apps/web` | Next.js storefront (Node server, not a static export) | `API_URL`, `NEXT_PUBLIC_SITE_URL` |
-| `apps/api` | Express REST API | `DATABASE_URL`, `JWT_SECRET`, `WEB_ORIGIN` (+ `COOKIE_DOMAIN` if on its own subdomain) |
-| Database | PostgreSQL 14+ | Apply with `npm run db:deploy -w @pickova/api` (never `migrate dev` in production) |
+1. Push this branch to GitHub.
+2. In Vercel: **New Project** → import the repository. The framework is detected as Next.js; keep the default build settings.
+3. Add one environment variable: `NEXT_PUBLIC_SITE_URL` = your public address (e.g. `https://pickova.com.ng`). It is used for the sitemap and link previews.
+4. Deploy, then add your domain under **Settings → Domains**.
 
-The browser only talks to the storefront; it proxies `/api/v1/*` to the API. The simplest production layout is therefore the API on a private/internal address and the storefront as the only public site.
+Every later push redeploys automatically — that is how product, price and delivery-fee edits in `data/` go live.
 
-## Before any production deploy
+> If the old seasonal app is already deployed from this repository's `main` branch, deploying this branch to the same Vercel project replaces it. Its old environment variables (database URL, auth secret, Paystack keys) are no longer used and can be removed.
 
-1. **Use a new, empty database.** The Supabase database referenced by the old root `.env` belongs to the previous seasonal-dropshipping app on `main`. Its tables are incompatible — do not point this app's `DATABASE_URL` at it.
-2. Generate a real `JWT_SECRET` (48+ random bytes) and set `NODE_ENV=production` (turns on `Secure` cookies and hides error details).
-3. Seed with `SEED_SAMPLE_CATALOGUE=false` and real `ADMIN_EMAIL` / `ADMIN_PASSWORD`, or remove the sample products and switch off the `sampleCatalogue` setting.
-4. Fill in contact details, social links and delivery fees (Store Settings — Phase 5; until then, the `StoreSetting` and `DeliveryZone` tables).
-5. Have the policy pages (Shipping & Returns, Privacy, Terms, FAQ) reviewed; they are marked "Draft for review".
-6. Checkout is not live until Phase 4 (Paystack keys + webhook URL `https://<api-host>/api/v1/webhooks/paystack`).
+## Before pointing customers at it
 
-## Build
-
-```bash
-npm ci
-npm run build          # prisma generate + API bundle (apps/api/dist) + Next build
-npm run start -w @pickova/api
-npm run start -w @pickova/web
-```
+- [ ] `data/store.ts` — WhatsApp number is correct; contact details and social links filled in
+- [ ] `data/products.ts` — real products, prices and photos; `sampleCatalogue: false`
+- [ ] `data/delivery.ts` — real delivery fees
+- [ ] Policy pages reviewed (they show a "Draft for review" notice until the notice is removed in `components/ui/PageHeader.tsx`)
+- [ ] `npm test && npm run build` pass
+- [ ] Place a test order from a phone and confirm the message arrives on the store's WhatsApp
