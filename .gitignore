@@ -1,17 +1,23 @@
-/node_modules
-/.next
-/out
-/build
+node_modules
+.next
+out
+build
+dist
+coverage
 .DS_Store
 *.pem
 npm-debug.log*
-.env
-.env*.local
-.vercel
 *.tsbuildinfo
 next-env.d.ts
+.vercel
 
-# Prisma local SQLite dev database
-*.db
-*.db-journal
-/prisma/dev.db*
+# Secrets — never commit real credentials
+.env
+.env.*
+!.env.example
+
+# Local development Postgres cluster (npm run db:start)
+/.pgdata
+
+# Previous seasonal-dropshipping app, kept locally for reference only (lives on `main`)
+/legacy

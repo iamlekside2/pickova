@@ -1,41 +1,31 @@
 {
   "name": "pickova",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
+  "description": "Pickova — Nigerian sneaker e-commerce platform. Pick your pair.",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
   "scripts": {
-    "dev": "next dev -p 3009",
-    "build": "prisma generate && next build",
-    "start": "next start -p 3009",
-    "lint": "next lint",
-    "db:push": "prisma db push",
-    "db:seed": "prisma db seed",
-    "db:studio": "prisma studio",
-    "db:reset": "prisma db push --force-reset && prisma db seed",
-    "postinstall": "prisma generate"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
-  },
-  "dependencies": {
-    "@prisma/client": "^5.22.0",
-    "bcryptjs": "^2.4.3",
-    "jose": "^5.10.0",
-    "lucide-react": "^0.417.0",
-    "next": "14.2.5",
-    "react": "18.3.1",
-    "react-dom": "18.3.1",
-    "react-icons": "^5.2.1"
+    "dev": "concurrently -n api,web -c blue,yellow \"npm run dev -w @pickova/api\" \"npm run dev -w @pickova/web\"",
+    "dev:api": "npm run dev -w @pickova/api",
+    "dev:web": "npm run dev -w @pickova/web",
+    "build": "npm run build -w @pickova/api && npm run build -w @pickova/web",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "db:start": "node scripts/local-db.mjs start",
+    "db:stop": "node scripts/local-db.mjs stop",
+    "db:migrate": "npm run db:migrate -w @pickova/api",
+    "db:seed": "npm run db:seed -w @pickova/api",
+    "db:studio": "npm run db:studio -w @pickova/api"
   },
   "devDependencies": {
-    "@types/bcryptjs": "^2.4.6",
-    "@types/node": "^20.14.14",
-    "@types/react": "^18.3.3",
-    "@types/react-dom": "^18.3.0",
-    "autoprefixer": "^10.4.19",
-    "postcss": "^8.4.40",
-    "prisma": "^5.22.0",
-    "tailwindcss": "^3.4.7",
-    "tsx": "^4.23.0",
-    "typescript": "^5.5.4"
+    "concurrently": "^9.1.0",
+    "typescript": "^5.6.3"
+  },
+  "engines": {
+    "node": ">=20"
   }
 }

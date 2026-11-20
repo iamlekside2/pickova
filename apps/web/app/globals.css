@@ -1,0 +1,102 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-offwhite font-sans text-navy antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-bold tracking-tight text-navy;
+    text-wrap: balance;
+  }
+  /* One consistent, visible focus ring for keyboard users. */
+  :focus-visible {
+    @apply outline-none ring-2 ring-orange ring-offset-2 ring-offset-white;
+  }
+  ::selection {
+    @apply bg-orange-200 text-navy-900;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-content px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Buttons — Poppins Medium, per the brand board. */
+  .btn {
+    @apply inline-flex min-h-11 items-center justify-center gap-2 rounded-full px-6 text-sm font-medium transition duration-200 disabled:cursor-not-allowed disabled:opacity-50;
+  }
+  .btn-primary {
+    @apply btn bg-orange text-white shadow-glow hover:bg-orange-600 active:scale-[0.98];
+  }
+  .btn-navy {
+    @apply btn bg-navy text-white hover:bg-navy-600 active:scale-[0.98];
+  }
+  .btn-outline {
+    @apply btn border border-navy-200 bg-white text-navy hover:border-navy hover:bg-navy-50;
+  }
+  .btn-ghost-light {
+    @apply btn border border-white/50 text-white hover:border-white hover:bg-white/10;
+  }
+
+  .card {
+    @apply rounded-card border border-line bg-white shadow-card;
+  }
+
+  .field-label {
+    @apply mb-1.5 block text-sm font-medium text-navy;
+  }
+  .field-input {
+    @apply block min-h-11 w-full rounded-xl border border-navy-100 bg-white px-4 text-sm text-navy placeholder:text-navy-300 transition focus:border-orange focus:outline-none focus:ring-2 focus:ring-orange/30;
+  }
+  .field-error {
+    @apply mt-1.5 text-sm text-danger;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.18em] text-orange-600;
+  }
+
+  .prose-policy h2 {
+    @apply mb-3 mt-10 text-xl;
+  }
+  .prose-policy p,
+  .prose-policy li {
+    @apply leading-relaxed text-navy-500;
+  }
+  .prose-policy p {
+    @apply mb-4;
+  }
+  .prose-policy ul {
+    @apply mb-4 list-disc space-y-1.5 pl-5;
+  }
+  .prose-policy a {
+    @apply font-medium text-orange-700 underline underline-offset-2;
+  }
+}
+
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
