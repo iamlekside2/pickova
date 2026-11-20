@@ -10,7 +10,7 @@ function HeroSneaker() {
       <div className="absolute left-1/2 top-[46%] size-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/40 blur-[70px]" />
       <div className="absolute left-1/2 top-[46%] size-[46%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-300/50 blur-[40px]" />
       {/* speed lines */}
-      <div className="absolute left-[2%] top-[30%] flex w-[38%] -rotate-[14deg] flex-col items-end gap-[0.9vw] lg:gap-3.5">
+      <div className="absolute left-[-2%] top-[34%] flex w-[34%] -rotate-[18deg] flex-col items-end gap-[0.9vw] lg:gap-3.5">
         <span className="h-3 w-[70%] rounded-full bg-gradient-to-r from-orange/0 via-orange to-orange-300 shadow-glow sm:h-4" />
         <span className="mr-[14%] h-3 w-[78%] rounded-full bg-gradient-to-r from-orange/0 via-orange to-orange-300 shadow-glow sm:h-4" />
         <span className="mr-[30%] h-3 w-[66%] rounded-full bg-gradient-to-r from-orange/0 via-orange to-orange-300 shadow-glow sm:h-4" />
@@ -21,15 +21,18 @@ function HeroSneaker() {
         <div className="absolute inset-x-0 bottom-0 top-[27%] rounded-b-[45%] bg-gradient-to-b from-navy-800 to-navy-900" />
         <div className="absolute inset-x-0 top-0 h-[55%] rounded-[50%] bg-gradient-to-b from-orange/25 to-transparent" />
       </div>
-      <Image
-        src="/brand/hero-sneaker.webp"
-        alt=""
-        width={1100}
-        height={534}
-        priority
-        sizes="(min-width: 1024px) 36rem, 92vw"
-        className="absolute inset-x-[2%] top-[14%] h-auto w-[96%] animate-float drop-shadow-[0_24px_30px_rgba(242,140,40,0.5)]"
-      />
+      {/* The photo was taken at this angle, so it is shown as shot — no artificial tilt. */}
+      <div className="absolute left-[17%] top-[-3%] w-[68%]">
+        <Image
+          src="/brand/hero-sneaker.webp"
+          alt=""
+          width={900}
+          height={878}
+          priority
+          sizes="(min-width: 1024px) 25rem, 65vw"
+          className="h-auto w-full animate-float drop-shadow-[0_26px_28px_rgba(13,23,45,0.55)]"
+        />
+      </div>
     </div>
   );
 }

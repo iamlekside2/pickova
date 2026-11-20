@@ -11,7 +11,7 @@ Original: `https://images.unsplash.com/photo-<id>` · Page: `https://unsplash.co
 
 | File | Unsplash photo id |
 | --- | --- |
-| nike-dunk-low-panda-1.jpg, ../brand/hero-sneaker.webp (background removed) | 1634624943296-54ce51cf732c |
+| nike-dunk-low-panda-1.jpg | 1634624943296-54ce51cf732c |
 | nike-dunk-low-panda-2.jpg | 1623684225794-a8f1f5037f5c |
 | nike-air-force-1-white-1.jpg | 1597350584914-55bb62285896 |
 | nike-air-force-1-white-2.jpg | 1600269452121-4f2416e55c28 |
@@ -24,7 +24,7 @@ Original: `https://images.unsplash.com/photo-<id>` · Page: `https://unsplash.co
 | new-balance-crt300-1.jpg | 1542272604-78d13c1f741a |
 | converse-chuck-taylor-khaki-1.jpg | 1556048219-bb6978360b84 |
 | converse-chuck-taylor-teal-1.jpg | 1554192833-a5cd504427dd |
-| nike-air-max-1-ultra-1.jpg | 1600185365483-26d7a4cc7519 |
+| nike-air-max-1-ultra-1.jpg, ../brand/hero-sneaker.webp (background removed) | 1600185365483-26d7a4cc7519 |
 | nike-air-max-1-ultra-2.jpg | 1600185365926-3a2ce3cdb9eb |
 | nike-air-max-1-ultra-3.jpg | 1600185365778-7875a359b924 |
 | nike-air-max-90-pink-1.jpg | 1511556532299-8f662fc26c06 |
