@@ -39,5 +39,5 @@ Original: `https://images.unsplash.com/photo-<id>` · Page: `https://unsplash.co
 | nike-kids-court-1.jpg | 1584564515943-b54cbb61836b |
 | nike-dunk-low-orange-1.jpg | 1692620334820-355161f652a8 |
 | air-jordan-1-low-grey-lifestyle.jpg | 1679284392463-bfe74e6b75b8 |
-| ../brand/hero-sneaker.jpg (cropped, otherwise untouched) | 1751624310837-32ecd6bc6d94 |
-| ../brand/promo-sneaker.jpg | 1695073621086-aa692bc32a3d |
+| ../brand/hero-sneaker.webp (background removed, colour neutralised) | 1695073621086-aa692bc32a3d |
+| ../brand/promo-sneaker.webp (background removed) | 1542291026-7eec264c27ff |

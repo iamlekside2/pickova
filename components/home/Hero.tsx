@@ -3,31 +3,37 @@ import Image from "next/image";
 import Link from "next/link";
 
 /**
- * Hero artwork: one untouched studio photograph in a rounded frame. Nothing is
- * cut out of its background, so there are no trimmed edges; the photo's own
- * orange backdrop carries the brand colour. The orange speed lines from the
- * logo sit behind the frame.
+ * Hero artwork: a real pair of sneakers floating over a pedestal, with the
+ * logo's orange speed lines and a golden glow. The pair was photographed at
+ * this angle, so it is shown as shot — never tilted in CSS.
  */
-function HeroPhoto() {
+function HeroSneaker() {
   return (
-    <div className="relative mx-auto w-full max-w-[38rem]" aria-hidden="true">
+    <div className="relative mx-auto aspect-[5/4] w-full max-w-[38rem]" aria-hidden="true">
       {/* golden-orange glow */}
-      <div className="absolute inset-[-8%] rounded-full bg-orange/30 blur-[80px]" />
+      <div className="absolute left-1/2 top-[46%] size-[80%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange/40 blur-[70px]" />
+      <div className="absolute left-1/2 top-[46%] size-[46%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-orange-300/50 blur-[40px]" />
       {/* speed lines */}
-      <div className="absolute -left-[7%] top-[16%] flex w-[30%] flex-col items-end gap-2.5 sm:gap-3.5">
-        <span className="h-2.5 w-[72%] rounded-full bg-gradient-to-r from-orange/0 to-orange sm:h-3.5" />
-        <span className="mr-[16%] h-2.5 w-[84%] rounded-full bg-gradient-to-r from-orange/0 to-orange sm:h-3.5" />
-        <span className="mr-[34%] h-2.5 w-[70%] rounded-full bg-gradient-to-r from-orange/0 to-orange sm:h-3.5" />
+      <div className="absolute left-[-3%] top-[22%] flex w-[36%] -rotate-[12deg] flex-col items-end gap-[0.9vw] lg:gap-3.5">
+        <span className="h-3 w-[70%] rounded-full bg-gradient-to-r from-orange/0 via-orange to-orange-300 shadow-glow sm:h-4" />
+        <span className="mr-[14%] h-3 w-[78%] rounded-full bg-gradient-to-r from-orange/0 via-orange to-orange-300 shadow-glow sm:h-4" />
+        <span className="mr-[30%] h-3 w-[66%] rounded-full bg-gradient-to-r from-orange/0 via-orange to-orange-300 shadow-glow sm:h-4" />
       </div>
-      <div className="relative overflow-hidden rounded-[1.75rem] shadow-[0_30px_70px_-20px_rgba(0,0,0,0.6)] ring-1 ring-white/15 sm:rounded-[2.25rem] lg:rotate-2">
+      {/* pedestal */}
+      <div className="absolute bottom-[2%] left-1/2 h-[20%] w-[88%] -translate-x-1/2">
+        <div className="absolute inset-x-0 top-0 h-[55%] rounded-[50%] bg-gradient-to-b from-navy-500 to-navy-700 ring-1 ring-white/10" />
+        <div className="absolute inset-x-0 bottom-0 top-[27%] rounded-b-[45%] bg-gradient-to-b from-navy-800 to-navy-900" />
+        <div className="absolute inset-x-0 top-0 h-[55%] rounded-[50%] bg-gradient-to-b from-orange/25 to-transparent" />
+      </div>
+      <div className="absolute inset-x-[1%] top-[13%]">
         <Image
-          src="/brand/hero-sneaker.jpg"
+          src="/brand/hero-sneaker.webp"
           alt=""
-          width={1600}
-          height={1080}
+          width={1500}
+          height={899}
           priority
-          sizes="(min-width: 1024px) 38rem, 92vw"
-          className="h-auto w-full"
+          sizes="(min-width: 1024px) 38rem, 94vw"
+          className="h-auto w-full animate-float drop-shadow-[0_28px_26px_rgba(8,14,30,0.6)]"
         />
       </div>
     </div>
@@ -37,13 +43,14 @@ function HeroPhoto() {
 export function Hero() {
   return (
     <section className="relative isolate overflow-hidden bg-navy-800 text-white">
-      {/* background: depth */}
+      {/* background: depth + brand curve */}
       <div className="absolute inset-0 -z-10 bg-[radial-gradient(90%_70%_at_70%_40%,#27375A_0%,#14213D_55%,#0D172D_100%)]" />
-      <p className="pointer-events-none absolute right-6 top-6 -z-10 hidden select-none text-[7rem] font-bold lowercase leading-none tracking-[-0.045em] text-white/[0.05] xl:block" aria-hidden>
+      <div className="absolute -bottom-36 -right-28 -z-10 size-[20rem] rounded-full bg-orange sm:-bottom-40 sm:-right-32 sm:size-[30rem] lg:-bottom-56 lg:-right-40 lg:size-[38rem]" aria-hidden />
+      <p className="pointer-events-none absolute right-6 top-10 -z-10 hidden select-none text-[7rem] font-bold lowercase leading-none tracking-[-0.045em] text-white/[0.05] xl:block" aria-hidden>
         pickova
       </p>
 
-      <div className="container-page grid items-center gap-10 pb-20 pt-10 sm:pt-14 lg:grid-cols-[1fr_1.05fr] lg:gap-12 lg:pb-28 lg:pt-16">
+      <div className="container-page grid items-center gap-6 pb-20 pt-10 sm:pt-14 lg:grid-cols-[1fr_1.05fr] lg:gap-10 lg:pb-28 lg:pt-16">
         <div className="animate-fade-up">
           <p className="inline-flex items-center rounded-full bg-orange px-4 py-1.5 text-sm font-semibold text-white shadow-glow">
             Pick your pair.
@@ -65,7 +72,7 @@ export function Hero() {
           </div>
           <p className="mt-8 text-sm text-white/60">Real shoes. Real photos. Fast delivery across Nigeria.</p>
         </div>
-        <HeroPhoto />
+        <HeroSneaker />
       </div>
 
       {/* soft curve into the page */}
