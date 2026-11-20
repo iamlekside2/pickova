@@ -136,16 +136,12 @@ export function PromoBanner({ banner }: { banner: { title: string; subtitle: str
   return (
     <section aria-label="Promotion" className="container-page">
       <div className="relative isolate overflow-hidden rounded-[1.75rem] bg-navy px-6 py-10 text-white sm:px-12 sm:py-14">
-        <div className="absolute -right-24 -top-24 -z-10 size-[26rem] rounded-full bg-orange" aria-hidden />
-        <div className="absolute -bottom-32 right-40 -z-10 size-72 rounded-full bg-orange/30 blur-3xl" aria-hidden />
-        <Image
-          src="/brand/promo-sneaker.webp"
-          alt=""
-          width={900}
-          height={830}
-          sizes="(min-width: 1024px) 24rem, 20rem"
-          className="absolute -bottom-10 right-2 -z-10 hidden h-auto w-[19rem] drop-shadow-2xl md:block lg:right-14 lg:w-[23rem]"
-        />
+        {/* An uncut studio photo fills the right side and fades into the navy — no cut-out edges. */}
+        <div className="absolute inset-y-0 right-0 -z-10 hidden w-[58%] md:block">
+          <Image src="/brand/promo-sneaker.jpg" alt="" fill sizes="(min-width: 768px) 58vw, 0px" className="object-cover object-[60%_55%]" />
+          {/* fade only the left third, so the shoes themselves keep their true colour */}
+          <div className="absolute inset-y-0 left-0 w-[38%] bg-gradient-to-r from-navy to-transparent" aria-hidden />
+        </div>
         <div className="max-w-lg">
           <p className="eyebrow !text-orange-300">Just landed</p>
           <h2 className="mt-3 text-3xl text-white sm:text-4xl">{banner.title}</h2>
